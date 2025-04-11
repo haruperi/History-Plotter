@@ -71,6 +71,7 @@ namespace cAlgo
         private DateTime _lastRefreshTime;
         private FileSystemWatcher _fileWatcher;
         private NumberFormatInfo _numberFormat;
+        private int _tradeCounter;  // Add counter for unique IDs
 
         protected override void Initialize()
         {
@@ -442,9 +443,11 @@ namespace cAlgo
         
         private void PlotTrades()
         {
+            _tradeCounter = 0;  // Reset counter before plotting
             foreach (var trade in _trades)
             {
-                string tradeId = $"{trade.OpenTime:yyyyMMddHHmmss}_{trade.OrderType}_{trade.Lots}";
+                _tradeCounter++;  // Increment counter for each trade
+                string tradeId = $"{trade.OpenTime:yyyyMMddHHmmss}_{trade.OrderType}_{trade.Lots}_{_tradeCounter}";
                 bool isBuy = trade.OrderType.Contains("Buy");
                 Color orderColor = isBuy ? _buyColor : _sellColor;
                 
